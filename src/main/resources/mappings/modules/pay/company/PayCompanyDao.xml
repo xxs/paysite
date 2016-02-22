@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pay.dao.company.PayCompanyDao">
+    
+	<sql id="payCompanyColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.name AS "name",
+		a.reg_name AS "regName",
+		a.status AS "status",
+		a.tel AS "tel",
+		a.addr AS "addr",
+		a.memo AS "memo",
+		a.image AS "image"
+	</sql>
+	
+	<sql id="payCompanyJoins">
+	</sql>
+    
+	<select id="get" resultType="PayCompany">
+		SELECT 
+			<include refid="payCompanyColumns"/>
+		FROM pay_company a
+		<include refid="payCompanyJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PayCompany">
+		SELECT 
+			<include refid="payCompanyColumns"/>
+		FROM pay_company a
+		<include refid="payCompanyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="regName != null and regName != ''">
+				AND a.reg_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{regName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{regName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{regName},'%')</if>
+			</if>
+			<if test="tel != null and tel != ''">
+				AND a.tel = #{tel}
+			</if>
+			<if test="addr != null and addr != ''">
+				AND a.addr = #{addr}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PayCompany">
+		SELECT 
+			<include refid="payCompanyColumns"/>
+		FROM pay_company a
+		<include refid="payCompanyJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pay_company(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			name,
+			reg_name,
+			status,
+			tel,
+			addr,
+			memo,
+			image
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{name},
+			#{regName},
+			#{status},
+			#{tel},
+			#{addr},
+			#{memo},
+			#{image}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pay_company SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			name = #{name},
+			reg_name = #{regName},
+			status = #{status},
+			tel = #{tel},
+			addr = #{addr},
+			memo = #{memo},
+			image = #{image}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pay_company SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
