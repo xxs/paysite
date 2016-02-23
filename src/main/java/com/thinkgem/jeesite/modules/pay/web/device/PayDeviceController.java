@@ -55,6 +55,9 @@ public class PayDeviceController extends BaseController {
 	@RequiresPermissions("pay:device:payDevice:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(PayDevice payDevice, HttpServletRequest request, HttpServletResponse response, Model model) {
+		PayStore payStore = new PayStore();
+		List<PayStore> list = payStoreService.findAllList(payStore);
+		model.addAttribute("list", list);
 		Page<PayDevice> page = payDeviceService.findPage(new Page<PayDevice>(request, response), payDevice); 
 		model.addAttribute("page", page);
 		return "modules/pay/device/payDeviceList";

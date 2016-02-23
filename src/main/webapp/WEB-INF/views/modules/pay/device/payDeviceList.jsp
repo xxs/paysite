@@ -28,7 +28,9 @@
 			<li><label>所属门店：</label>
 				<form:select path="payStore.id" class="input-medium">
 					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+					<c:forEach items="${list}" var="payStore">
+						<form:option value="${payStore.id}" label="${payStore.name }"/>
+					</c:forEach>
 				</form:select>
 			</li>
 			<li><label>编号：</label>
@@ -48,8 +50,9 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>所属门店</th>
+				<th>编号</th>
 				<th>名称</th>
+				<th>所属门店</th>
 				<th>备注信息</th>
 				<th>创建者</th>
 				<shiro:hasPermission name="pay:device:payDevice:edit"><th>操作</th></shiro:hasPermission>
@@ -58,12 +61,15 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="payDevice">
 			<tr>
-				<td><a href="${ctx}/pay/device/payDevice/form?id=${payDevice.id}">
-					${fns:getPayStoreById(payDevice.payStore.id).name}
-				</a></td>
+				<td>
+					${payDevice.number}
+				</td>
 				<td>
 					${payDevice.name}
 				</td>
+				<td><a href="${ctx}/pay/device/payDevice/form?id=${payDevice.id}">
+					${fns:getPayStoreById(payDevice.payStore.id).name}
+				</a></td>
 				<td>
 					${payDevice.remarks}
 				</td>
