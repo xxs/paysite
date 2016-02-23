@@ -47,6 +47,14 @@
     <example>${fns:getConst(key)}</example>
   </function>
   
+  <function>
+    <description>根据编码获取store对象</description>
+    <name>getPayStoreById</name>
+    <function-class>com.thinkgem.jeesite.modules.pay.utils.PayStoreUtils</function-class>
+    <function-signature>com.thinkgem.jeesite.modules.pay.entity.store.PayStore get(java.lang.String)</function-signature>
+    <example>${fns:getPayStoreById(id)}</example>  
+  </function>
+  
   <!-- UserUtils -->
   <function>
     <description>获取当前用户对象</description>

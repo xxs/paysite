@@ -38,7 +38,7 @@
 			<div class="controls">
 				<form:select path="payStore.id" class="input-xlarge ">
 					<form:option value="" label=""/>
-					<c:forEach items="${page.list}" var="payStore">
+					<c:forEach items="${list}" var="payStore">
 						<form:option value="${payStore.id}" label="${payStore.name }"/>
 					</c:forEach>
 				</form:select>

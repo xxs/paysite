@@ -4,9 +4,11 @@
 package com.thinkgem.jeesite.modules.pay.entity.device;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.pay.entity.store.PayStore;
 
 /**
  * 设备管理Entity
@@ -16,7 +18,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class PayDevice extends DataEntity<PayDevice> {
 	
 	private static final long serialVersionUID = 1L;
-	private PayDevice payStore;		// 所属门店
+	private PayStore payStore;		// 所属门店
 	private String number;		// 编号
 	private String name;		// 名称
 	private String status;		// 状态
@@ -31,11 +33,11 @@ public class PayDevice extends DataEntity<PayDevice> {
 	}
 
 	@JsonBackReference
-	public PayDevice getPayStore() {
+	public PayStore getPayStore() {
 		return payStore;
 	}
 
-	public void setPayStore(PayDevice payStore) {
+	public void setPayStore(PayStore payStore) {
 		this.payStore = payStore;
 	}
 	
