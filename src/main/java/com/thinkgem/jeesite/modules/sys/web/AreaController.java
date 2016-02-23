@@ -51,6 +51,7 @@ public class AreaController extends BaseController {
 	@RequiresPermissions("sys:area:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Area area, Model model) {
+		List<Area> list = areaService.findAll();
 		model.addAttribute("list", areaService.findAll());
 		return "modules/sys/areaList";
 	}
