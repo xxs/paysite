@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pay.dao.device.PayDeviceDao">
+    
+	<sql id="payDeviceColumns">
+		a.id AS "id",
+		a.pay_store_id AS "payStore.id",
+		a.number AS "number",
+		a.name AS "name",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.status AS "status",
+		a.memo AS "memo",
+		a.create_by AS "createBy.id"
+	</sql>
+	
+	<sql id="payDeviceJoins">
+	</sql>
+    
+	<select id="get" resultType="PayDevice">
+		SELECT 
+			<include refid="payDeviceColumns"/>
+		FROM pay_device a
+		<include refid="payDeviceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="PayDevice">
+		SELECT 
+			<include refid="payDeviceColumns"/>
+		FROM pay_device a
+		<include refid="payDeviceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="PayDevice">
+		SELECT 
+			<include refid="payDeviceColumns"/>
+		FROM pay_device a
+		<include refid="payDeviceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO pay_device(
+			id,
+			pay_store_id,
+			number,
+			name,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			status,
+			memo,
+			create_by
+		) VALUES (
+			#{id},
+			#{payStore.id},
+			#{number},
+			#{name},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{status},
+			#{memo},
+			#{createBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE pay_device SET 	
+			pay_store_id = #{payStore.id},
+			number = #{number},
+			name = #{name},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			status = #{status},
+			memo = #{memo}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE pay_device SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
