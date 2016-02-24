@@ -19,4 +19,6 @@ import com.thinkgem.jeesite.modules.sys.entity.User;
 public interface PayCompanyDao extends CrudDao<PayCompany> {
 	
 	public List<User> findUserByPayCompanyId(PayCompany payCompany);
+	
+	public int deleteUserPayCompany(String user_id,String company_id);
 }

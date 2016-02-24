@@ -11,9 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.pay.entity.company.PayCompany;
 import com.thinkgem.jeesite.modules.pay.dao.company.PayCompanyDao;
-import com.thinkgem.jeesite.modules.sys.dao.RoleDao;
+import com.thinkgem.jeesite.modules.pay.entity.company.PayCompany;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
@@ -38,6 +37,9 @@ public class PayCompanyService extends CrudService<PayCompanyDao, PayCompany> {
 	
 	public List<User> findUserByPayCompanyId(PayCompany payCompany){
 		return payCompanyDao.findUserByPayCompanyId(payCompany);
+	}
+	public int deleteUserPayCompany(User user,PayCompany payCompany){
+		return payCompanyDao.deleteUserPayCompany(user.getId(),payCompany.getId());
 	}
 	
 	public Page<PayCompany> findPage(Page<PayCompany> page, PayCompany payCompany) {

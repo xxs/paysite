@@ -172,7 +172,8 @@ public class PayCompanyController extends BaseController {
 		if (UserUtils.getUser().getId().equals(userId)) {
 			addMessage(redirectAttributes, "无法从商户【" + payCompany.getName() + "】中移除用户【" + user.getName() + "】自己！");
 		}else {
-			if (user.getPayCompanyList().size() <= 1){
+			List<User> userList = payCompanyService.findUserByPayCompanyId(payCompany);
+			if (userList.size() <= 1){
 				addMessage(redirectAttributes, "用户【" + user.getName() + "】从商户【" + payCompany.getName() + "】中移除失败！这已经是该用户的唯一商户，不能移除。");
 			}else{
 				Boolean flag = systemService.outUserInPayCompany(payCompany, user);

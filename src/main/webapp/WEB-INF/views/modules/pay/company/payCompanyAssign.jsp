@@ -35,7 +35,6 @@
 						var ids = h.find("iframe")[0].contentWindow.ids;
 						//nodes = selectedTree.getSelectedNodes();
 						if (v=="ok"){
-							alert("點擊了ok");
 							// 删除''的元素
 							if(ids[0]==''){
 								ids.shift();

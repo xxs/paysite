@@ -213,4 +213,9 @@
 		WHERE id = #{id}
 	</update>
 	
+	<!-- 删除用户和商户关联表数据 -->
+	<delete id="deleteUserPayCompany">
+		DELETE FROM sys_user_company WHERE user_id = #{0} AND company_id = #{1}
+	</delete>
+	
 </mapper>

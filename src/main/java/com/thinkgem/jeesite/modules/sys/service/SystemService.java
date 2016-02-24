@@ -155,12 +155,15 @@ public class SystemService extends BaseService implements InitializingBean {
 				throw new ServiceException(user.getLoginName() + "没有设置角色！");
 			}
 			// 更新用户与商户关联
-			userDao.deleteUserPayCompany(user);
-			if (user.getPayCompanyList() != null && user.getPayCompanyList().size() > 0){
+			if(user.getPayCompanyIdList()!=null &&user.getPayCompanyIdList().size()>0){
+				userDao.deleteUserPayCompany(user);
 				userDao.insertUserPayCompany(user);
-			}else{
-				throw new ServiceException(user.getLoginName() + "没有设置商户！");
 			}
+//			if (user.getPayCompanyList() != null && user.getPayCompanyList().size() > 0){
+//				userDao.insertUserPayCompany(user);
+//			}else{
+//				throw new ServiceException(user.getLoginName() + "没有设置商户！");
+//			}
 			// 将当前用户同步到Activiti
 			saveActivitiUser(user);
 			// 清除用户缓存
@@ -332,15 +335,12 @@ public class SystemService extends BaseService implements InitializingBean {
 	}
 	@Transactional(readOnly = false)
 	public Boolean outUserInPayCompany(PayCompany payCompany, User user) {
-		List<PayCompany> payCompanies = user.getPayCompanyList();
-		for (PayCompany e : payCompanies){
-			if (e.getId().equals(payCompany.getId())){
-				payCompanies.remove(e);
-				saveUser(user);
-				return true;
-			}
+		int result = payCompanyDao.deleteUserPayCompany(user.getId(), payCompany.getId());
+		if(result>=1){
+			return true;
+		}else{
+			return false;
 		}
-		return false;
 	}
 	
 	@Transactional(readOnly = false)
