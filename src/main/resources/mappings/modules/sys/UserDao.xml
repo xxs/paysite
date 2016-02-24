@@ -293,12 +293,26 @@
 	<delete id="deleteUserRole">
 		DELETE FROM sys_user_role WHERE user_id = #{id}
 	</delete>
+	<!-- 删除用户和商户关联表数据 -->
+	<delete id="deleteUserPayCompany">
+		DELETE FROM sys_user_company WHERE user_id = #{id}
+	</delete>
 	
 	<!-- 插入用户和角色关联表数据 -->
 	<insert id="insertUserRole">
 		INSERT INTO sys_user_role(user_id, role_id)
 		<foreach collection="roleList" item="role" separator=" union all ">
 			SELECT #{id}, #{role.id}
+			<if test="dbName != 'mssql'">
+			FROM dual
+			</if>
+		</foreach>
+	</insert>
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="insertUserPayCompany">
+		INSERT INTO sys_user_company(user_id, company_id)
+		<foreach collection="payCompanyList" item="company" separator=" union all ">
+			SELECT #{id}, #{company.id}
 			<if test="dbName != 'mssql'">
 			FROM dual
 			</if>

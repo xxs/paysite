@@ -66,6 +66,20 @@ public interface UserDao extends CrudDao<User> {
 	public int insertUserRole(User user);
 	
 	/**
+	 * 删除用户商户关联数据
+	 * @param user
+	 * @return
+	 */
+	public int deleteUserPayCompany(User user);
+	
+	/**
+	 * 插入用户商户关联数据
+	 * @param user
+	 * @return
+	 */
+	public int insertUserPayCompany(User user);
+	
+	/**
 	 * 更新用户信息
 	 * @param user
 	 * @return

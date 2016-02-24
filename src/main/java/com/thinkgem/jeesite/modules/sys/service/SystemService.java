@@ -26,6 +26,8 @@ import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.utils.Encodes;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.Servlets;
+import com.thinkgem.jeesite.modules.pay.dao.company.PayCompanyDao;
+import com.thinkgem.jeesite.modules.pay.entity.company.PayCompany;
 import com.thinkgem.jeesite.modules.sys.dao.MenuDao;
 import com.thinkgem.jeesite.modules.sys.dao.RoleDao;
 import com.thinkgem.jeesite.modules.sys.dao.UserDao;
@@ -54,6 +56,8 @@ public class SystemService extends BaseService implements InitializingBean {
 	private UserDao userDao;
 	@Autowired
 	private RoleDao roleDao;
+	@Autowired
+	private PayCompanyDao payCompanyDao;
 	@Autowired
 	private MenuDao menuDao;
 	@Autowired
@@ -150,6 +154,13 @@ public class SystemService extends BaseService implements InitializingBean {
 			}else{
 				throw new ServiceException(user.getLoginName() + "没有设置角色！");
 			}
+			// 更新用户与商户关联
+			userDao.deleteUserPayCompany(user);
+			if (user.getPayCompanyList() != null && user.getPayCompanyList().size() > 0){
+				userDao.insertUserPayCompany(user);
+			}else{
+				throw new ServiceException(user.getLoginName() + "没有设置商户！");
+			}
 			// 将当前用户同步到Activiti
 			saveActivitiUser(user);
 			// 清除用户缓存
@@ -239,6 +250,9 @@ public class SystemService extends BaseService implements InitializingBean {
 	public Role getRole(String id) {
 		return roleDao.get(id);
 	}
+	public PayCompany getPayCompany(String id) {
+		return payCompanyDao.get(id);
+	}
 
 	public Role getRoleByName(String name) {
 		Role r = new Role();
@@ -258,6 +272,10 @@ public class SystemService extends BaseService implements InitializingBean {
 	
 	public List<Role> findAllRole(){
 		return UserUtils.getRoleList();
+	}
+	
+	public List<PayCompany> findAllPayCompany(){
+		return UserUtils.getPayCompanyList();
 	}
 	
 	@Transactional(readOnly = false)
@@ -312,6 +330,18 @@ public class SystemService extends BaseService implements InitializingBean {
 		}
 		return false;
 	}
+	@Transactional(readOnly = false)
+	public Boolean outUserInPayCompany(PayCompany payCompany, User user) {
+		List<PayCompany> payCompanies = user.getPayCompanyList();
+		for (PayCompany e : payCompanies){
+			if (e.getId().equals(payCompany.getId())){
+				payCompanies.remove(e);
+				saveUser(user);
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	@Transactional(readOnly = false)
 	public User assignUserToRole(Role role, User user) {
@@ -323,6 +353,20 @@ public class SystemService extends BaseService implements InitializingBean {
 			return null;
 		}
 		user.getRoleList().add(role);
+		saveUser(user);
+		return user;
+	}
+	
+	@Transactional(readOnly = false)
+	public User assignUserToPayCompany(PayCompany payCompany, User user) {
+		if (user == null){
+			return null;
+		}
+		List<String> payCompanyIds = user.getPayCompanyIdList();
+		if (payCompanyIds.contains(payCompany.getId())) {
+			return null;
+		}
+		user.getPayCompanyList().add(payCompany);
 		saveUser(user);
 		return user;
 	}

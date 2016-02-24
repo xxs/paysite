@@ -84,6 +84,7 @@
 					<fmt:formatDate value="${payCompany.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="pay:company:payCompany:edit"><td>
+					<a href="${ctx}/pay/company/payCompany/assign?id=${payCompany.id}">授权用户</a>
     				<a href="${ctx}/pay/company/payCompany/form?id=${payCompany.id}">修改</a>
 					<a href="${ctx}/pay/company/payCompany/delete?id=${payCompany.id}" onclick="return confirmx('确认要删除该商户吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>

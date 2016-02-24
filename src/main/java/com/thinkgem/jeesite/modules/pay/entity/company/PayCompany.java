@@ -3,9 +3,14 @@
  */
 package com.thinkgem.jeesite.modules.pay.entity.company;
 
+import java.util.List;
+
 import org.hibernate.validator.constraints.Length;
 
+import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 商户管理功能Entity
@@ -22,6 +27,38 @@ public class PayCompany extends DataEntity<PayCompany> {
 	private String addr;		// 地址
 	private String memo;		// 描述
 	private String image;		// logo
+	
+	private User user;		// 根据用户ID查询角色列表
+
+	private List<User> userList = Lists.newArrayList(); // 拥有用户列表
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public List<User> getUserList() {
+		return userList;
+	}
+	
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+	
+	public List<String> getUserIdList() {
+		List<String> nameIdList = Lists.newArrayList();
+		for (User user : userList) {
+			nameIdList.add(user.getId());
+		}
+		return nameIdList;
+	}
+	
+	public String getUserIds() {
+		return StringUtils.join(getUserIdList(), ",");
+	}
 	
 	public PayCompany() {
 		super();

@@ -19,7 +19,9 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.common.supcan.annotation.treelist.cols.SupCol;
 import com.thinkgem.jeesite.common.utils.Collections3;
 import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+import com.thinkgem.jeesite.common.utils.excel.fieldtype.PayCompanyListType;
 import com.thinkgem.jeesite.common.utils.excel.fieldtype.RoleListType;
+import com.thinkgem.jeesite.modules.pay.entity.company.PayCompany;
 
 /**
  * 用户Entity
@@ -51,8 +53,11 @@ public class User extends DataEntity<User> {
 	private Date oldLoginDate;	// 上次登陆日期
 	
 	private Role role;	// 根据角色查询用户条件
+	private PayCompany payCompany;	// 根据商户查询用户条件
 	
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
+	
+	private List<PayCompany> payCompanyList = Lists.newArrayList(); // 拥有商户列表
 
 	public User() {
 		super();
@@ -71,6 +76,11 @@ public class User extends DataEntity<User> {
 	public User(Role role){
 		super();
 		this.role = role;
+	}
+	
+	public User(PayCompany payCompany){
+		super();
+		this.payCompany = payCompany;
 	}
 	
 	public String getPhoto() {
@@ -269,9 +279,17 @@ public class User extends DataEntity<User> {
 	public Role getRole() {
 		return role;
 	}
-
+	
 	public void setRole(Role role) {
 		this.role = role;
+	}
+	
+	public PayCompany getPayCompany() {
+		return payCompany;
+	}
+
+	public void setPayCompany(PayCompany payCompany) {
+		this.payCompany = payCompany;
 	}
 
 	@JsonIgnore
@@ -283,6 +301,16 @@ public class User extends DataEntity<User> {
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
 	}
+	
+	@JsonIgnore
+	@ExcelField(title="拥有商户", align=1, sort=800, fieldType=PayCompanyListType.class)
+	public List<PayCompany> getPayCompanyList() {
+		return payCompanyList;
+	}
+	
+	public void setPayCompanyList(List<PayCompany> payCompanyList) {
+		this.payCompanyList = payCompanyList;
+	}
 
 	@JsonIgnore
 	public List<String> getRoleIdList() {
@@ -291,6 +319,15 @@ public class User extends DataEntity<User> {
 			roleIdList.add(role.getId());
 		}
 		return roleIdList;
+	}
+	
+	@JsonIgnore
+	public List<String> getPayCompanyIdList() {
+		List<String> payCompanyIdList = Lists.newArrayList();
+		for (PayCompany payCompany : payCompanyList) {
+			payCompanyIdList.add(payCompany.getId());
+		}
+		return payCompanyIdList;
 	}
 
 	public void setRoleIdList(List<String> roleIdList) {
@@ -302,11 +339,26 @@ public class User extends DataEntity<User> {
 		}
 	}
 	
+	public void setPayCompanyIdList(List<String> payCompanyIdList) {
+		payCompanyList = Lists.newArrayList();
+		for (String payCompanyId : payCompanyIdList) {
+			PayCompany payCompany = new PayCompany();
+			payCompany.setId(payCompanyId);
+			payCompanyList.add(payCompany);
+		}
+	}
+	
 	/**
 	 * 用户拥有的角色名称字符串, 多个角色名称用','分隔.
 	 */
 	public String getRoleNames() {
 		return Collections3.extractToString(roleList, "name", ",");
+	}
+	/**
+	 * 用户拥有的商户名称字符串, 多个角色名称用','分隔.
+	 */
+	public String getPayCompanyNames() {
+		return Collections3.extractToString(payCompanyList, "name", ",");
 	}
 	
 	public boolean isAdmin(){

@@ -14,6 +14,8 @@ import org.apache.shiro.subject.Subject;
 import com.thinkgem.jeesite.common.service.BaseService;
 import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.utils.SpringContextHolder;
+import com.thinkgem.jeesite.modules.pay.dao.company.PayCompanyDao;
+import com.thinkgem.jeesite.modules.pay.entity.company.PayCompany;
 import com.thinkgem.jeesite.modules.sys.dao.AreaDao;
 import com.thinkgem.jeesite.modules.sys.dao.MenuDao;
 import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
@@ -35,6 +37,7 @@ public class UserUtils {
 
 	private static UserDao userDao = SpringContextHolder.getBean(UserDao.class);
 	private static RoleDao roleDao = SpringContextHolder.getBean(RoleDao.class);
+	private static PayCompanyDao payCompanyDao = SpringContextHolder.getBean(PayCompanyDao.class);
 	private static MenuDao menuDao = SpringContextHolder.getBean(MenuDao.class);
 	private static AreaDao areaDao = SpringContextHolder.getBean(AreaDao.class);
 	private static OfficeDao officeDao = SpringContextHolder.getBean(OfficeDao.class);
@@ -45,6 +48,7 @@ public class UserUtils {
 	public static final String USER_CACHE_LIST_BY_OFFICE_ID_ = "oid_";
 
 	public static final String CACHE_ROLE_LIST = "roleList";
+	public static final String CACHE_PAYCOMPANY_LIST = "payCompanyList";
 	public static final String CACHE_MENU_LIST = "menuList";
 	public static final String CACHE_AREA_LIST = "areaList";
 	public static final String CACHE_OFFICE_LIST = "officeList";
@@ -149,6 +153,26 @@ public class UserUtils {
 			putCache(CACHE_ROLE_LIST, roleList);
 		}
 		return roleList;
+	}
+	/**
+	 * 获取当前用户-商户列表
+	 * @return
+	 */
+	public static List<PayCompany> getPayCompanyList(){
+		@SuppressWarnings("unchecked")
+		List<PayCompany> payCompanieList = (List<PayCompany>)getCache(CACHE_PAYCOMPANY_LIST);
+		if (payCompanieList == null){
+			User user = getUser();
+			if (user.isAdmin()){
+				payCompanieList = payCompanyDao.findAllList(new PayCompany());
+			}else{
+				PayCompany payCompany = new PayCompany();
+				payCompany.getSqlMap().put("dsf", BaseService.dataScopeFilter(user.getCurrentUser(), "o", "u"));
+				payCompanieList = payCompanyDao.findList(payCompany);
+			}
+			putCache(CACHE_PAYCOMPANY_LIST, payCompanieList);
+		}
+		return payCompanieList;
 	}
 	
 	/**
