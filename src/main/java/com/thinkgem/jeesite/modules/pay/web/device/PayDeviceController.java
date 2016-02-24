@@ -72,6 +72,7 @@ public class PayDeviceController extends BaseController {
 		model.addAttribute("list", list);
 		model.addAttribute("page", page);
 		model.addAttribute("payDevice", payDevice);
+		
 		return "modules/pay/device/payDeviceForm";
 	}
 
