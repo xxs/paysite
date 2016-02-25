@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import com.thinkgem.jeesite.modules.pay.entity.function.PayFunction;
 import com.thinkgem.jeesite.modules.pay.entity.store.PayStore;
 
 /**
@@ -19,4 +20,7 @@ public interface PayStoreDao extends CrudDao<PayStore> {
 	
 	public List<PayStore> findAllList();
 	
+	public List<PayFunction> findPayFuncationByPayStoreId(PayStore payStore);
+	
+	public int assignPayFunctionToPayStore(String payStore,String payFunction);
 }

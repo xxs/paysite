@@ -20,13 +20,33 @@
 	
 	<sql id="payStoreJoins">
 	</sql>
-    
+    <sql id="payFunctionColumns">
+		a.id AS "id",
+		a.number AS "number",
+		a.name AS "name",
+		a.status AS "status",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.memo AS "memo",
+		a.del_flag AS "delFlag"
+	</sql>
 	<select id="get" resultType="PayStore">
 		SELECT 
 			<include refid="payStoreColumns"/>
 		FROM pay_store a
 		<include refid="payStoreJoins"/>
 		WHERE a.id = #{id}
+	</select>
+	
+	<!-- 根据门店获取门店的功能列表 -->
+	<select id="findPayFuncationByPayStoreId" resultType="PayFunction" useCache="true">
+		SELECT
+			<include refid="payFunctionColumns"/> 
+		FROM pay_function a
+		WHERE 
+			a.id in (SELECT d.function_id FROM pay_store_function  d where d.store_id = #{id})
 	</select>
 	
 	<select id="findList" resultType="PayStore">

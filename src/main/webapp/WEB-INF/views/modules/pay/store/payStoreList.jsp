@@ -86,6 +86,7 @@
 					${payStore.remarks}
 				</td>
 				<shiro:hasPermission name="pay:store:payStore:edit"><td>
+					<a href="${ctx}/pay/store/payStore/assign?id=${payStore.id}">授权功能按钮</a>
     				<a href="${ctx}/pay/store/payStore/form?id=${payStore.id}">修改</a>
 					<a href="${ctx}/pay/store/payStore/delete?id=${payStore.id}" onclick="return confirmx('确认要删除该门店吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>

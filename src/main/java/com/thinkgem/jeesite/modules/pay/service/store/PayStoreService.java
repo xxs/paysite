@@ -5,12 +5,14 @@ package com.thinkgem.jeesite.modules.pay.service.store;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.pay.dao.store.PayStoreDao;
+import com.thinkgem.jeesite.modules.pay.entity.function.PayFunction;
 import com.thinkgem.jeesite.modules.pay.entity.store.PayStore;
 
 /**
@@ -22,6 +24,8 @@ import com.thinkgem.jeesite.modules.pay.entity.store.PayStore;
 @Transactional(readOnly = true)
 public class PayStoreService extends CrudService<PayStoreDao, PayStore> {
 
+	@Autowired
+	private PayStoreDao payStoreDao;
 	
 	public PayStore get(String id) {
 		PayStore payStore = super.get(id);
@@ -37,6 +41,13 @@ public class PayStoreService extends CrudService<PayStoreDao, PayStore> {
 	
 	public Page<PayStore> findPage(Page<PayStore> page, PayStore payStore) {
 		return super.findPage(page, payStore);
+	}
+	public List<PayFunction> findPayFuncationByPayStoreId(PayStore payStore) {
+		return payStoreDao.findPayFuncationByPayStoreId(payStore);
+	}
+	
+	public PayFunction assignPayFunctionToPayStore(PayStore payStore,PayFunction payFunction) {
+		return payStoreDao.assignPayFunctionToPayStore(payStore.getId(),payFunction.getId());;
 	}
 	
 	@Transactional(readOnly = false)
