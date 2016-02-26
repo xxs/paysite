@@ -45,9 +45,24 @@ public class PayStoreService extends CrudService<PayStoreDao, PayStore> {
 	public List<PayFunction> findPayFuncationByPayStoreId(PayStore payStore) {
 		return payStoreDao.findPayFuncationByPayStoreId(payStore);
 	}
-	
+	public List<PayFunction> findPayFuncationListByPayStoreId(PayStore payStore) {
+		return payStoreDao.findPayFuncationListByPayStoreId(payStore);
+	}
+	@Transactional(readOnly = false)
 	public PayFunction assignPayFunctionToPayStore(PayStore payStore,PayFunction payFunction) {
-		return payStoreDao.assignPayFunctionToPayStore(payStore.getId(),payFunction.getId());;
+		if(null==payStore||null==payFunction){
+			return null;
+		}
+		int result = payStoreDao.insertPayFunctionToPayStore(payStore.getId(),payFunction.getId());
+		if(result>0){
+			return payFunction;
+		}else{
+			return null;
+		}
+	}
+	@Transactional(readOnly = false)
+	public int outpayStore(String payStoreId,String payFunctionId) {
+		return payStoreDao.outpayStore(payStoreId,payFunctionId);
 	}
 	
 	@Transactional(readOnly = false)

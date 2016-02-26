@@ -24,7 +24,7 @@
 	            <c:forEach items="${allPayFunctions}" var="payFunction">
 	            {id:"${payFunction.id}",
 	             pId:"0", 
-	             name:"<font color='red' style='font-weight:bold;'>${payFunction.name}</font>"},
+	             name:"${payFunction.name}"},
 	            </c:forEach>];
 		var selectedNodes =[
 		        <c:forEach items="${payFunctions}" var="payFunction">

@@ -13,11 +13,13 @@
 	<div class="container-fluid breadcrumb">
 		<div class="row-fluid span12">
 			<span class="span4">商户名称: <b>${payCompany.name}</b></span>
-			<span class="span4">归属机构: </span>
-			<span class="span4">英文名称: </span>
+			<span class="span4">营业执照: ${payCompany.regName}</span>
+			<span class="span4">商户状态: ${fns:getDictLabel(payCompany.status, 'pay_company_status', '')}</span>
 		</div>
 		<div class="row-fluid span8">
-			<span class="span4">角色类型: </span>
+			<span class="span4">商户电话: ${payCompany.tel}</span>
+			<span class="span4">商户地址: ${payCompany.addr}</span>
+			<span class="span4">商户描述: ${payCompany.memo}</span>
 		</div>
 	</div>
 	<sys:message content="${message}"/>

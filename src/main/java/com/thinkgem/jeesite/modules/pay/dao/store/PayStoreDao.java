@@ -22,5 +22,9 @@ public interface PayStoreDao extends CrudDao<PayStore> {
 	
 	public List<PayFunction> findPayFuncationByPayStoreId(PayStore payStore);
 	
-	public int assignPayFunctionToPayStore(String payStore,String payFunction);
+	public List<PayFunction> findPayFuncationListByPayStoreId(PayStore payStore);
+	
+	public int outpayStore(String payStoreId,String payFunctionId);
+	
+	public int insertPayFunctionToPayStore(String payStoreId,String payFunctionId);
 }

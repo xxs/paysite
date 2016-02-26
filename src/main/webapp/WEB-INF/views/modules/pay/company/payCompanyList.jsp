@@ -28,7 +28,7 @@
 			<li><label>商户名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="128" class="input-medium"/>
 			</li>
-			<li><label>营业执照商户名称：</label>
+			<li><label>营业执照：</label>
 				<form:input path="regName" htmlEscape="false" maxlength="128" class="input-medium"/>
 			</li>
 			<li><label>电话：</label>
@@ -46,7 +46,7 @@
 		<thead>
 			<tr>
 				<th>商户名称</th>
-				<th>营业执照商户名称</th>
+				<th>营业执照</th>
 				<th>商户状态</th>
 				<th>电话</th>
 				<th>地址</th>

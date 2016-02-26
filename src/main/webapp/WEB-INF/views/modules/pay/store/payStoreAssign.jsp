@@ -13,11 +13,12 @@
 	<div class="container-fluid breadcrumb">
 		<div class="row-fluid span12">
 			<span class="span4">门店名称: <b>${payStore.name}</b></span>
-			<span class="span4">归属机构: </span>
-			<span class="span4">英文名称: </span>
+			<span class="span4">门店状态: ${fns:getDictLabel(payStore.status, 'pay_store_flag', '')}</span>
 		</div>
 		<div class="row-fluid span8">
-			<span class="span4">角色类型: </span>
+			<span class="span4">门店电话: ${payStore.tel}</span>
+			<span class="span4">门店地址: ${payStore.addr}</span>
+			<span class="span4">门店描述: ${payStore.remarks}</span>
 		</div>
 	</div>
 	<sys:message content="${message}"/>
@@ -65,16 +66,12 @@
 		</script>
 	</div>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
-		<thead><tr><th>归属公司</th><th>归属部门</th><th>登录名</th><th>姓名</th><th>电话</th><th>手机</th><shiro:hasPermission name="sys:user:edit"><th>操作</th></shiro:hasPermission></tr></thead>
+		<thead><tr><th>编号</th><th>功能名称</th><shiro:hasPermission name="pay:store:payStore:edit"><th>操作</th></shiro:hasPermission></tr></thead>
 		<tbody>
 		<c:forEach items="${payFunctions}" var="payFunction">
 			<tr>
+				<td>${payFunction.number}</td>
 				<td>${payFunction.name}</td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
 				<shiro:hasPermission name="pay:store:payStore:edit"><td>
 					<a href="${ctx}/pay/store/payStore/outpayStore?payStoreId=${payStore.id}&payFunctionId=${payFunction.id}" 
 						onclick="return confirmx('确认要将功能按钮<b>[${payFunction.name}]</b>从<b>[${payStore.name}]</b>门店中移除吗？', this.href)">移除</a>
