@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pay.dao.txdevice.TxDeviceDao">
+    
+	<sql id="txDeviceColumns">
+		a.pk AS "pk",
+		a.func_id AS "funcId",
+		a.store_id AS "storeId",
+		a.tx_code AS "txCode",
+		a.tx_time AS "txTime",
+		a.user_id AS "user.id",
+		a.device_id AS "deviceId",
+		a.merchant_id AS "merchantId",
+		a.order_no AS "orderNo",
+		a.order_req_no AS "orderReqNo",
+		a.order_date AS "orderDate",
+		a.our_trans_no AS "ourTransNo",
+		a.amount AS "amount",
+		a.trans_status AS "transStatus",
+		a.refund_flag AS "refundFlag",
+		a.customer_id AS "customerId",
+		a.pay_time AS "payTime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		u6.name AS "user.name"
+	</sql>
+	
+	<sql id="txDeviceJoins">
+		LEFT JOIN sys_user u6 ON u6.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="TxDevice">
+		SELECT 
+			<include refid="txDeviceColumns"/>
+		FROM tx_device a
+		<include refid="txDeviceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TxDevice">
+		SELECT 
+			<include refid="txDeviceColumns"/>
+		FROM tx_device a
+		<include refid="txDeviceJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TxDevice">
+		SELECT 
+			<include refid="txDeviceColumns"/>
+		FROM tx_device a
+		<include refid="txDeviceJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tx_device(
+			func_id,
+			store_id,
+			tx_code,
+			tx_time,
+			user_id,
+			device_id,
+			merchant_id,
+			order_no,
+			order_req_no,
+			order_date,
+			our_trans_no,
+			amount,
+			trans_status,
+			refund_flag,
+			customer_id,
+			pay_time,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{funcId},
+			#{storeId},
+			#{txCode},
+			#{txTime},
+			#{user.id},
+			#{deviceId},
+			#{merchantId},
+			#{orderNo},
+			#{orderReqNo},
+			#{orderDate},
+			#{ourTransNo},
+			#{amount},
+			#{transStatus},
+			#{refundFlag},
+			#{customerId},
+			#{payTime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tx_device SET 	
+			func_id = #{funcId},
+			store_id = #{storeId},
+			tx_code = #{txCode},
+			tx_time = #{txTime},
+			user_id = #{user.id},
+			device_id = #{deviceId},
+			merchant_id = #{merchantId},
+			order_no = #{orderNo},
+			order_req_no = #{orderReqNo},
+			order_date = #{orderDate},
+			our_trans_no = #{ourTransNo},
+			amount = #{amount},
+			trans_status = #{transStatus},
+			refund_flag = #{refundFlag},
+			customer_id = #{customerId},
+			pay_time = #{payTime},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM tx_device
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.pay.dao.store.StoreDao">
+    
+	<sql id="storeColumns">
+		a.pk AS "pk",
+		a.com_pk AS "company",
+		a.name AS "name",
+		a.store_id AS "storeId",
+		a.status AS "status",
+		a.tel AS "tel",
+		a.addr AS "addr",
+		a.memo AS "memo",
+		a.create_time AS "createTime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="storeJoins">
+	</sql>
+    
+	<select id="get" resultType="Store">
+		SELECT 
+			<include refid="storeColumns"/>
+		FROM store a
+		<include refid="storeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Store">
+		SELECT 
+			<include refid="storeColumns"/>
+		FROM store a
+		<include refid="storeJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Store">
+		SELECT 
+			<include refid="storeColumns"/>
+		FROM store a
+		<include refid="storeJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO store(
+			com_pk,
+			name,
+			store_id,
+			status,
+			tel,
+			addr,
+			memo,
+			create_time,
+			create_by,
+			create_date,
+			update_by,
+			update_date
+		) VALUES (
+			#{company},
+			#{name},
+			#{storeId},
+			#{status},
+			#{tel},
+			#{addr},
+			#{memo},
+			#{createTime},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE store SET 	
+			com_pk = #{company},
+			name = #{name},
+			store_id = #{storeId},
+			status = #{status},
+			tel = #{tel},
+			addr = #{addr},
+			memo = #{memo},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM store
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
