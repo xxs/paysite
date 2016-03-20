@@ -3,9 +3,12 @@
  */
 package com.thinkgem.jeesite.modules.pay.dao.company;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.pay.entity.company.Company;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 商户管理DAO接口
@@ -14,5 +17,9 @@ import com.thinkgem.jeesite.modules.pay.entity.company.Company;
  */
 @MyBatisDao
 public interface CompanyDao extends CrudDao<Company> {
+	
+	public List<User> findUserByCompanyId(Company company);
+	
+	public int deleteUserCompany(String user_id,String company_id);
 	
 }

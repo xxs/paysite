@@ -21,6 +21,23 @@
 	<sql id="storeJoins">
 	</sql>
     
+    <!-- 根据门店获取门店的功能列表 -->
+	<select id="findPayFuncationByPayStoreId" resultType="PayFunction" useCache="true">
+		SELECT
+			<include refid="payFunctionColumns"/> 
+		FROM pay_function a 
+		WHERE a.del_flag = 0 and
+			a.id in (SELECT d.function_id FROM pay_store_function  d where d.store_id = #{id})
+	</select>
+	<!-- 根据门店获取门店的未添加的功能按钮列表 -->
+	<select id="findPayFuncationListByPayStoreId" resultType="PayFunction" useCache="true">
+		SELECT
+			<include refid="payFunctionColumns"/> 
+		FROM pay_function a 
+		WHERE a.del_flag = 0 and
+			a.id not in (SELECT d.function_id FROM pay_store_function  d where d.store_id = #{id})
+	</select>
+    
 	<select id="get" resultType="Store">
 		SELECT 
 			<include refid="storeColumns"/>
@@ -119,5 +136,18 @@
 		DELETE FROM store
 		WHERE id = #{id}
 	</update>
+	
+	<delete id="outpayStore">
+		DELETE FROM store_function WHERE store_id = #{0} AND function_id = #{1}
+	</delete>
+	<insert id="insertPayFunctionToPayStore">
+		INSERT INTO pay_store_function(
+			store_id,
+			function_id
+		) VALUES (
+			#{0},
+			#{1}
+		)
+	</insert>
 	
 </mapper>

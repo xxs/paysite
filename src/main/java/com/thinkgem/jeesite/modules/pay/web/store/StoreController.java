@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.pay.web.store;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,9 +19,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.Collections3;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.pay.entity.function.Function;
 import com.thinkgem.jeesite.modules.pay.entity.store.Store;
+import com.thinkgem.jeesite.modules.pay.service.function.FunctionService;
 import com.thinkgem.jeesite.modules.pay.service.store.StoreService;
 
 /**
@@ -33,6 +38,8 @@ public class StoreController extends BaseController {
 
 	@Autowired
 	private StoreService storeService;
+	@Autowired
+	private FunctionService functionService;
 	
 	@ModelAttribute
 	public Store get(@RequestParam(required=false) String id) {
@@ -78,6 +85,84 @@ public class StoreController extends BaseController {
 		storeService.delete(store);
 		addMessage(redirectAttributes, "删除门店成功");
 		return "redirect:"+Global.getAdminPath()+"/pay/store/store/?repage";
+	}
+	
+	/**
+	 * 功能按钮分配页面
+	 * @param payStore
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("pay:store:store:edit")
+	@RequestMapping(value = "assign")
+	public String assign(Store store, Model model) {
+		List<Function> functions = storeService.findFuncationByStoreId(store);
+		model.addAttribute("functions", functions);
+		return "modules/pay/store/storeAssign";
+	}
+	
+	/**
+	 * 功能按钮分配 -- 打开功能按钮分配对话框
+	 * @param payStore
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions("pay:store:store:edit")
+	@RequestMapping(value = "selectFunctionToStore")
+	public String selectFunctionToStore(Store store, Model model) {
+		List<Function> functions = storeService.findFuncationByStoreId(store);
+		List<Function> allFunctions = storeService.findFuncationListByStoreId(store);
+		model.addAttribute("store", store);
+		model.addAttribute("functions", functions);
+		model.addAttribute("allFunctions", allFunctions);
+		model.addAttribute("selectIds", Collections3.extractToString(functions, "name", ","));
+		return "modules/pay/store/selectFunctionToStore";
+	}
+	
+	/**
+	 * 功能按钮分配 -- 从功能按钮中移除用户
+	 * @param userId
+	 * @param payStoreId
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("pay:store:store:edit")
+	@RequestMapping(value = "outpayStore")
+	public String outpayStore(String functionId, String storeId, RedirectAttributes redirectAttributes) {
+		if(Global.isDemoMode()){
+			addMessage(redirectAttributes, "演示模式，不允许操作！");
+			return "redirect:" + adminPath + "/pay/store/store/assign?id="+storeId;
+		}
+		storeService.outpayStore(storeId, functionId);
+		return "redirect:" + adminPath + "/pay/store/store/assign?id="+storeId;
+	}
+	
+	/**
+	 * 功能按钮分配
+	 * @param payStore
+	 * @param idsArr
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("pay:store:store:edit")
+	@RequestMapping(value = "assignStore")
+	public String assignPayStore(Store store, String[] idsArr, RedirectAttributes redirectAttributes) {
+		if(Global.isDemoMode()){
+			addMessage(redirectAttributes, "演示模式，不允许操作！");
+			return "redirect:" + adminPath + "/pay/store/store/assign?id="+store.getId();
+		}
+		StringBuilder msg = new StringBuilder();
+		int newNum = 0;
+		for (int i = 0; i < idsArr.length; i++) {
+			Function function = functionService.get(idsArr[i]);
+			function = storeService.assignFunctionToStore(store, function);
+			if (null != function) {
+				msg.append("<br/>新增按钮功能【" + function.getName() + "】到门店【" + store.getName() + "】！");
+				newNum++;
+			}
+		}
+		addMessage(redirectAttributes, "已成功分配 "+newNum+" 个功能按钮"+msg);
+		return "redirect:" + adminPath + "/pay/store/store/assign?id="+store.getId();
 	}
 
 }

@@ -3,8 +3,11 @@
  */
 package com.thinkgem.jeesite.modules.pay.dao.store;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import com.thinkgem.jeesite.modules.pay.entity.function.Function;
 import com.thinkgem.jeesite.modules.pay.entity.store.Store;
 
 /**
@@ -15,4 +18,13 @@ import com.thinkgem.jeesite.modules.pay.entity.store.Store;
 @MyBatisDao
 public interface StoreDao extends CrudDao<Store> {
 	
+	public List<Store> findAllList();
+	
+	public List<Function> findFuncationByStoreId(Store store);
+	
+	public List<Function> findFuncationListByStoreId(Store store);
+	
+	public int outStore(String storeId,String functionId);
+	
+	public int insertFunctionToStore(String storeId,String functionId);
 }
