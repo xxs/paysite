@@ -8,7 +8,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/pay/store/store/">门店列表</a></li>
-		<li class="active"><a href="${ctx}/pay/store/store/assign?id=${store.id}"><shiro:hasPermission name="pay:store:store:edit">门店授权</shiro:hasPermission><shiro:lacksPermission name="sys:role:edit">人员列表</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/pay/store/store/assign?pk=${store.pk}"><shiro:hasPermission name="pay:store:store:edit">门店授权</shiro:hasPermission><shiro:lacksPermission name="sys:role:edit">功能列表</shiro:lacksPermission></a></li>
 	</ul>
 	<div class="container-fluid breadcrumb">
 		<div class="row-fluid span12">
