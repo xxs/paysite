@@ -12,7 +12,7 @@
 		
 		// 初始化
 		$(document).ready(function(){
-			allFunctionsTree = $.fn.zTree.init($("#allFunctionsTree"), setting, allFunctionsTreeNodes);
+			officeTree = $.fn.zTree.init($("#officeTree"), setting, officeNodes);
 			selectedTree = $.fn.zTree.init($("#selectedTree"), setting, selectedNodes);
 		});
 
@@ -20,17 +20,25 @@
 				data: {simpleData: {enable: true}},
 				callback: {onClick: treeOnClick}};
 		
-		var allFunctionsTreeNodes=[
-	            <c:forEach items="${allFunctions}" var="function">
-	            {id:"${function.id}",
-	             pId:"0", 
-	             name:"${function.name}<font color='blue' style='font-weight:bold;'>（${fns:getDictLabel(function.funcType, 'function_type', '')}）</font>"},
+		var officeNodes=[
+	            <c:forEach items="${officeList}" var="office">
+	            {id:"${office.id}",
+	             pId:"${not empty office.parent?office.parent.id:0}", 
+	             name:"${office.name}"},
 	            </c:forEach>];
+	
+		var pre_selectedNodes =[
+   		        <c:forEach items="${userList}" var="user">
+   		        {id:"${user.id}",
+   		         pId:"0",
+   		         name:"<font color='red' style='font-weight:bold;'>${user.name}</font>"},
+   		        </c:forEach>];
+		
 		var selectedNodes =[
-		        <c:forEach items="${functions}" var="function">
-		        {id:"${function.id}",
+		        <c:forEach items="${userList}" var="user">
+		        {id:"${user.id}",
 		         pId:"0",
-		         name:"<font color='red' style='font-weight:bold;'>${function.name}（${fns:getDictLabel(function.funcType, 'function_type', '')}）</font>"},
+		         name:"<font color='red' style='font-weight:bold;'>${user.name}</font>"},
 		        </c:forEach>];
 		
 		var pre_ids = "${selectIds}".split(",");
@@ -39,18 +47,25 @@
 		//点击选择项回调
 		function treeOnClick(event, treeId, treeNode, clickFlag){
 			$.fn.zTree.getZTreeObj(treeId).expandNode(treeNode);
-			if("allFunctionsTree"==treeId){
+			if("officeTree"==treeId){
+				$.get("${ctx}/pay/company/payCompany/users?officeId=" + treeNode.id, function(userNodes){
+					$.fn.zTree.init($("#userTree"), setting, userNodes);
+				});
+			}
+			if("userTree"==treeId){
+				//alert(treeNode.id + " | " + ids);
+				//alert(typeof ids[0] + " | " +  typeof treeNode.id);
 				if($.inArray(String(treeNode.id), ids)<0){
 					selectedTree.addNodes(null, treeNode);
 					ids.push(String(treeNode.id));
 				}
-			}
+			};
 			if("selectedTree"==treeId){
 				if($.inArray(String(treeNode.id), pre_ids)<0){
 					selectedTree.removeNode(treeNode);
 					ids.splice($.inArray(String(treeNode.id), ids), 1);
 				}else{
-					top.$.jBox.tip("门店原有功能按钮不能清除！", 'info');
+					top.$.jBox.tip("商户原有成员不能清除！", 'info');
 				}
 			}
 		};
@@ -59,9 +74,9 @@
 			    if (v == 'ok'){
 					var tips="";
 					if(pre_ids.sort().toString() == ids.sort().toString()){
-						tips = "未给门店【${store.name}】分配新功能按钮！";
+						tips = "未给商户【${payCompany.name}】分配新成员！";
 					}else{
-						tips = "已选功能按钮清除成功！";
+						tips = "已选人员清除成功！";
 					}
 					ids=pre_ids.slice(0);
 					selectedNodes=pre_selectedNodes;
@@ -73,19 +88,23 @@
 			    }
 			    return true;
 			};
-			tips="确定清除门店【${store.name}】下的已选功能按钮？";
+			tips="确定清除商户【${payCompany.name}】下的已选人员？";
 			top.$.jBox.confirm(tips, "清除确认", submit);
 		};
 	</script>
 </head>
 <body>
 	<div id="assignRole" class="row-fluid span12">
-		<div class="span5" style="border-right: 1px solid #A8A8A8;">
-			<p>待选功能按钮：</p>
-			<div id="allFunctionsTree" class="ztree"></div>
+		<div class="span4" style="border-right: 1px solid #A8A8A8;">
+			<p>所在部门：</p>
+			<div id="officeTree" class="ztree"></div>
 		</div>
-		<div class="span5" style="padding-left:16px;border-left: 0px solid #A8A8A8;">
-			<p>已选功能按钮：</p>
+		<div class="span3">
+			<p>待选人员：</p>
+			<div id="userTree" class="ztree"></div>
+		</div>
+		<div class="span3" style="padding-left:16px;border-left: 1px solid #A8A8A8;">
+			<p>已选人员：</p>
 			<div id="selectedTree" class="ztree"></div>
 		</div>
 	</div>

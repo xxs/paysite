@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.Collections3;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.pay.entity.function.Function;
 import com.thinkgem.jeesite.modules.pay.entity.store.Store;
@@ -42,10 +41,10 @@ public class StoreController extends BaseController {
 	private FunctionService functionService;
 	
 	@ModelAttribute
-	public Store get(@RequestParam(required=false) String id) {
+	public Store get(@RequestParam(required=false) Long pk) {
 		Store entity = null;
-		if (StringUtils.isNotBlank(id)){
-			entity = storeService.get(id);
+		if (pk!=null){
+			entity = storeService.get(pk);
 		}
 		if (entity == null){
 			entity = new Store();
@@ -73,6 +72,9 @@ public class StoreController extends BaseController {
 	public String save(Store store, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, store)){
 			return form(store, model);
+		}
+		if(store.getPk()!=null){
+			store.setIsNewRecord(false);
 		}
 		storeService.save(store);
 		addMessage(redirectAttributes, "保存门店成功");
@@ -127,14 +129,14 @@ public class StoreController extends BaseController {
 	 * @return
 	 */
 	@RequiresPermissions("pay:store:store:edit")
-	@RequestMapping(value = "outpayStore")
-	public String outpayStore(String functionId, String storeId, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "outStore")
+	public String outStore(String functionId, String storeId, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/pay/store/store/assign?id="+storeId;
 		}
 		storeService.outpayStore(storeId, functionId);
-		return "redirect:" + adminPath + "/pay/store/store/assign?id="+storeId;
+		return "redirect:" + adminPath + "/pay/store/store/assign?pk="+storeId;
 	}
 	
 	/**
@@ -146,23 +148,23 @@ public class StoreController extends BaseController {
 	 */
 	@RequiresPermissions("pay:store:store:edit")
 	@RequestMapping(value = "assignStore")
-	public String assignPayStore(Store store, String[] idsArr, RedirectAttributes redirectAttributes) {
+	public String assignStore(Store store, String[] idsArr, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
-			return "redirect:" + adminPath + "/pay/store/store/assign?id="+store.getId();
+			return "redirect:" + adminPath + "/pay/store/store/assign?pk="+store.getPk();
 		}
 		StringBuilder msg = new StringBuilder();
 		int newNum = 0;
 		for (int i = 0; i < idsArr.length; i++) {
 			Function function = functionService.get(idsArr[i]);
-			function = storeService.assignFunctionToStore(store, function);
+			function = storeService.assignFunctionToStore(store.getPk(), function);
 			if (null != function) {
 				msg.append("<br/>新增按钮功能【" + function.getName() + "】到门店【" + store.getName() + "】！");
 				newNum++;
 			}
 		}
 		addMessage(redirectAttributes, "已成功分配 "+newNum+" 个功能按钮"+msg);
-		return "redirect:" + adminPath + "/pay/store/store/assign?id="+store.getId();
+		return "redirect:" + adminPath + "/pay/store/store/assign?pk="+store.getPk();
 	}
 
 }

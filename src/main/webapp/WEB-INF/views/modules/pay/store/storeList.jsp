@@ -67,9 +67,9 @@
 					<fmt:formatDate value="${store.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="pay:store:store:edit"><td>
-					<a href="${ctx}/pay/store/store/assign?id=${payStore.id}">授权功能按钮</a>
-    				<a href="${ctx}/pay/store/store/form?id=${store.id}">修改</a>
-					<a href="${ctx}/pay/store/store/delete?id=${store.id}" onclick="return confirmx('确认要删除该门店吗？', this.href)">删除</a>
+					<a href="${ctx}/pay/store/store/assign?pk=${store.pk}">授权功能按钮</a>
+    				<a href="${ctx}/pay/store/store/form?pk=${store.pk}">修改</a>
+					<a href="${ctx}/pay/store/store/delete?pk=${store.pk}" onclick="return confirmx('确认要删除该门店吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

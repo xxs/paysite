@@ -17,33 +17,29 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate"
 	</sql>
+	<sql id="functionColumns">
+		a.pk AS "pk",
+		a.id AS "id",
+		a.name AS "name",
+		a.status AS "status",
+		a.func_type AS "funcType",
+		a.remark AS "remark",
+		a.create_time AS "createTime",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate"
+	</sql>
 	
 	<sql id="storeJoins">
 	</sql>
-    
-    <!-- 根据门店获取门店的功能列表 -->
-	<select id="findPayFuncationByPayStoreId" resultType="PayFunction" useCache="true">
-		SELECT
-			<include refid="payFunctionColumns"/> 
-		FROM pay_function a 
-		WHERE a.del_flag = 0 and
-			a.id in (SELECT d.function_id FROM pay_store_function  d where d.store_id = #{id})
-	</select>
-	<!-- 根据门店获取门店的未添加的功能按钮列表 -->
-	<select id="findPayFuncationListByPayStoreId" resultType="PayFunction" useCache="true">
-		SELECT
-			<include refid="payFunctionColumns"/> 
-		FROM pay_function a 
-		WHERE a.del_flag = 0 and
-			a.id not in (SELECT d.function_id FROM pay_store_function  d where d.store_id = #{id})
-	</select>
     
 	<select id="get" resultType="Store">
 		SELECT 
 			<include refid="storeColumns"/>
 		FROM store a
 		<include refid="storeJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.pk = #{pk}
 	</select>
 	
 	<select id="findList" resultType="Store">
@@ -129,21 +125,36 @@
 			memo = #{memo},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate}
-		WHERE id = #{id}
+		WHERE pk = #{pk}
 	</update>
 	
 	<update id="delete">
 		DELETE FROM store
-		WHERE id = #{id}
+		WHERE pk = #{pk}
 	</update>
 	
-	<delete id="outpayStore">
-		DELETE FROM store_function WHERE store_id = #{0} AND function_id = #{1}
+	<!-- 根据门店获取门店的功能列表 -->
+	<select id="findFuncationByStoreId" resultType="Function" useCache="true">
+		SELECT
+			<include refid="functionColumns"/> 
+		FROM function a 
+		WHERE a.pk in (SELECT d.func_id FROM function_store_auth  d where d.store_pk = #{pk})
+	</select>
+	<!-- 根据门店获取门店的未添加的功能按钮列表 -->
+	<select id="findFuncationListByStoreId" resultType="Function" useCache="true">
+		SELECT
+			<include refid="functionColumns"/> 
+		FROM function a 
+		WHERE a.pk not in (SELECT d.func_id FROM function_store_auth d where d.store_pk = #{pk})
+	</select>
+	
+	<delete id="outStore">
+		DELETE FROM function_store_auth WHERE store_pk = #{0} AND func_id = #{1}
 	</delete>
-	<insert id="insertPayFunctionToPayStore">
-		INSERT INTO pay_store_function(
-			store_id,
-			function_id
+	<insert id="insertFunctionToStore">
+		INSERT INTO function_store_auth(
+			store_pk,
+			func_id
 		) VALUES (
 			#{0},
 			#{1}

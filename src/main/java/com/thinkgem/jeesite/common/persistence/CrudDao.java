@@ -19,6 +19,12 @@ public interface CrudDao<T> extends BaseDao {
 	 * @return
 	 */
 	public T get(String id);
+	/**
+	 * 获取单条数据
+	 * @param pk
+	 * @return
+	 */
+	public T get(long pk);
 	
 	/**
 	 * 获取单条数据

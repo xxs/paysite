@@ -3,12 +3,16 @@
  */
 package com.thinkgem.jeesite.modules.pay.entity.company;
 
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 商户管理Entity
@@ -27,6 +31,38 @@ public class Company extends DataEntity<Company> {
 	private String memo;		// 备注
 	private String image;		// 图像
 	private Date createTime;		// 创建时间
+	
+	private User user;		// 根据用户ID查询角色列表
+	
+	private List<User> userList = Lists.newArrayList(); // 拥有用户列表
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public List<User> getUserList() {
+		return userList;
+	}
+	
+	public void setUserList(List<User> userList) {
+		this.userList = userList;
+	}
+	
+	public List<String> getUserIdList() {
+		List<String> nameIdList = Lists.newArrayList();
+		for (User user : userList) {
+			nameIdList.add(user.getId());
+		}
+		return nameIdList;
+	}
+	
+	public String getUserIds() {
+		return StringUtils.join(getUserIdList(), ",");
+	}
 	
 	public Company() {
 		super();

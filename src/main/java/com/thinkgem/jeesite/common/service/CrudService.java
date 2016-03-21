@@ -34,6 +34,14 @@ public abstract class CrudService<D extends CrudDao<T>, T extends DataEntity<T>>
 	public T get(String id) {
 		return dao.get(id);
 	}
+	/**
+	 * 获取单条数据
+	 * @param pk
+	 * @return
+	 */
+	public T get(long pk) {
+		return dao.get(pk);
+	}
 	
 	/**
 	 * 获取单条数据

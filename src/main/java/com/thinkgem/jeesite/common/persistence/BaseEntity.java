@@ -35,6 +35,11 @@ public abstract class BaseEntity<T> implements Serializable {
 	protected String id;
 	
 	/**
+	 * 为pay系统设置的表pk主键
+	 */
+	protected Long pk;
+	
+	/**
 	 * 当前用户
 	 */
 	protected User currentUser;
@@ -68,9 +73,17 @@ public abstract class BaseEntity<T> implements Serializable {
 	public String getId() {
 		return id;
 	}
-
+	
 	public void setId(String id) {
 		this.id = id;
+	}
+	@SupCol(isUnique="true", isHide="true")
+	public Long getPk() {
+		return pk;
+	}
+
+	public void setPk(Long pk) {
+		this.pk = pk;
 	}
 	
 	@JsonIgnore
@@ -129,7 +142,7 @@ public abstract class BaseEntity<T> implements Serializable {
      * @return
      */
 	public boolean getIsNewRecord() {
-        return isNewRecord || StringUtils.isBlank(getId());
+        return isNewRecord || (StringUtils.isBlank(getId()) && getPk()==null);
     }
 
 	/**

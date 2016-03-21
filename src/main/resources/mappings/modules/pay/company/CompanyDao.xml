@@ -26,7 +26,7 @@
 			<include refid="companyColumns"/>
 		FROM company a
 		<include refid="companyJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.pk = #{pk}
 	</select>
 	
 	<select id="findList" resultType="Company">
@@ -113,12 +113,12 @@
 			create_time = #{createTime},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate}
-		WHERE id = #{id}
+		WHERE pk = #{pk}
 	</update>
 	
 	<update id="delete">
 		DELETE FROM company
-		WHERE id = #{id}
+		WHERE pk = #{pk}
 	</update>
 	
 </mapper>

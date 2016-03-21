@@ -28,10 +28,10 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/pay/company/company/">商户列表</a></li>
-		<li class="active"><a href="${ctx}/pay/company/company/form?id=${company.id}">商户<shiro:hasPermission name="pay:company:company:edit">${not empty company.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:company:company:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/pay/company/company/form?pk=${company.pk}">商户<shiro:hasPermission name="pay:company:company:edit">${not empty company.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:company:company:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="company" action="${ctx}/pay/company/company/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
+		<form:hidden path="pk"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">名称：</label>

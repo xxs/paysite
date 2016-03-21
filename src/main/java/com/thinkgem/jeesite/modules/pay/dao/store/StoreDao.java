@@ -26,5 +26,5 @@ public interface StoreDao extends CrudDao<Store> {
 	
 	public int outStore(String storeId,String functionId);
 	
-	public int insertFunctionToStore(String storeId,String functionId);
+	public int insertFunctionToStore(Long storePk,Long functionId);
 }

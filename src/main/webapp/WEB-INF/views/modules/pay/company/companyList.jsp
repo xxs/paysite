@@ -47,7 +47,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="company">
 			<tr>
-				<td><a href="${ctx}/pay/company/company/form?id=${company.id}">
+				<td><a href="${ctx}/pay/company/company/form?pk=${company.pk}">
 					${company.name}
 				</a></td>
 				<td>
@@ -63,8 +63,9 @@
 					<fmt:formatDate value="${company.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="pay:company:company:edit"><td>
-    				<a href="${ctx}/pay/company/company/form?id=${company.id}">修改</a>
-					<a href="${ctx}/pay/company/company/delete?id=${company.id}" onclick="return confirmx('确认要删除该商户吗？', this.href)">删除</a>
+					<a href="${ctx}/pay/company/company/assign?pk=${company.pk}">授权用户</a>
+    				<a href="${ctx}/pay/company/company/form?pk=${company.pk}">修改</a>
+					<a href="${ctx}/pay/company/company/delete?pk=${company.pk}" onclick="return confirmx('确认要删除该商户吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

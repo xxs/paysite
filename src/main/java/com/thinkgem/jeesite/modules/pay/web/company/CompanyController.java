@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.pay.entity.company.Company;
 import com.thinkgem.jeesite.modules.pay.service.company.CompanyService;
 
@@ -35,10 +34,10 @@ public class CompanyController extends BaseController {
 	private CompanyService companyService;
 	
 	@ModelAttribute
-	public Company get(@RequestParam(required=false) String id) {
+	public Company get(@RequestParam(required=false) Long pk) {
 		Company entity = null;
-		if (StringUtils.isNotBlank(id)){
-			entity = companyService.get(id);
+		if (pk!=null){
+			entity = companyService.get(pk);
 		}
 		if (entity == null){
 			entity = new Company();
@@ -66,6 +65,9 @@ public class CompanyController extends BaseController {
 	public String save(Company company, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, company)){
 			return form(company, model);
+		}
+		if(company.getPk()!=null){
+			company.setIsNewRecord(false);
 		}
 		companyService.save(company);
 		addMessage(redirectAttributes, "保存商户成功");

@@ -45,11 +45,11 @@ public class StoreService extends CrudService<StoreDao, Store> {
 		return storeDao.findFuncationListByStoreId(store);
 	}
 	@Transactional(readOnly = false)
-	public Function assignFunctionToStore(Store store,Function function) {
-		if(null==store||null==function){
+	public Function assignFunctionToStore(Long storePk,Function function) {
+		if(null==storePk||null==function){
 			return null;
 		}
-		int result = storeDao.insertFunctionToStore(store.getId(),function.getId());
+		int result = storeDao.insertFunctionToStore(storePk,function.getPk());
 		if(result>0){
 			return function;
 		}else{
