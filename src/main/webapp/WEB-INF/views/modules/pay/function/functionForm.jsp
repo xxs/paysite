@@ -31,7 +31,7 @@
 		<li class="active"><a href="${ctx}/pay/function/function/form?id=${function.id}">功能<shiro:hasPermission name="pay:function:function:edit">${not empty function.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:function:function:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="function" action="${ctx}/pay/function/function/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
+		<form:hidden path="pk"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">名称：</label>

@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.pay.entity.txdevice.TxDevice;
 import com.thinkgem.jeesite.modules.pay.service.txdevice.TxDeviceService;
 
@@ -35,10 +34,10 @@ public class TxDeviceController extends BaseController {
 	private TxDeviceService txDeviceService;
 	
 	@ModelAttribute
-	public TxDevice get(@RequestParam(required=false) String id) {
+	public TxDevice get(@RequestParam(required=false) Long pk) {
 		TxDevice entity = null;
-		if (StringUtils.isNotBlank(id)){
-			entity = txDeviceService.get(id);
+		if (pk!=null){
+			entity = txDeviceService.get(pk);
 		}
 		if (entity == null){
 			entity = new TxDevice();

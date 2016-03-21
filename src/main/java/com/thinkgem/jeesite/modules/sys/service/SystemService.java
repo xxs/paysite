@@ -26,8 +26,8 @@ import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.utils.Encodes;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.Servlets;
-import com.thinkgem.jeesite.modules.pay.dao.company.PayCompanyDao;
-import com.thinkgem.jeesite.modules.pay.entity.company.PayCompany;
+import com.thinkgem.jeesite.modules.pay.dao.company.CompanyDao;
+import com.thinkgem.jeesite.modules.pay.entity.company.Company;
 import com.thinkgem.jeesite.modules.sys.dao.MenuDao;
 import com.thinkgem.jeesite.modules.sys.dao.RoleDao;
 import com.thinkgem.jeesite.modules.sys.dao.UserDao;
@@ -57,7 +57,7 @@ public class SystemService extends BaseService implements InitializingBean {
 	@Autowired
 	private RoleDao roleDao;
 	@Autowired
-	private PayCompanyDao payCompanyDao;
+	private CompanyDao companyDao;
 	@Autowired
 	private MenuDao menuDao;
 	@Autowired
@@ -155,12 +155,12 @@ public class SystemService extends BaseService implements InitializingBean {
 				throw new ServiceException(user.getLoginName() + "没有设置角色！");
 			}
 			// 更新用户与商户关联
-			if(user.getPayCompanyIdList()!=null &&user.getPayCompanyIdList().size()>0){
-				userDao.deleteUserPayCompany(user);
-				userDao.insertUserPayCompany(user);
+			if(user.getCompanyIdList()!=null &&user.getCompanyIdList().size()>0){
+				userDao.deleteUserCompany(user);
+				userDao.insertUserCompany(user);
 			}
-//			if (user.getPayCompanyList() != null && user.getPayCompanyList().size() > 0){
-//				userDao.insertUserPayCompany(user);
+//			if (user.getCompanyList() != null && user.getCompanyList().size() > 0){
+//				userDao.insertUserCompany(user);
 //			}else{
 //				throw new ServiceException(user.getLoginName() + "没有设置商户！");
 //			}
@@ -253,8 +253,12 @@ public class SystemService extends BaseService implements InitializingBean {
 	public Role getRole(String id) {
 		return roleDao.get(id);
 	}
-	public PayCompany getPayCompany(String id) {
-		return payCompanyDao.get(id);
+	public Company getCompany(String id) {
+		return companyDao.get(id);
+	}
+	
+	public Company getCompany(Long id) {
+		return companyDao.get(id);
 	}
 
 	public Role getRoleByName(String name) {
@@ -277,8 +281,8 @@ public class SystemService extends BaseService implements InitializingBean {
 		return UserUtils.getRoleList();
 	}
 	
-	public List<PayCompany> findAllPayCompany(){
-		return UserUtils.getPayCompanyList();
+	public List<Company> findAllCompany(){
+		return UserUtils.getCompanyList();
 	}
 	
 	@Transactional(readOnly = false)
@@ -334,8 +338,8 @@ public class SystemService extends BaseService implements InitializingBean {
 		return false;
 	}
 	@Transactional(readOnly = false)
-	public Boolean outUserInPayCompany(PayCompany payCompany, User user) {
-		int result = payCompanyDao.deleteUserPayCompany(user.getId(), payCompany.getId());
+	public Boolean outUserInCompany(Company company, User user) {
+		int result = companyDao.deleteUserCompany(user.getId(), company.getPk());
 		if(result>=1){
 			return true;
 		}else{
@@ -358,15 +362,15 @@ public class SystemService extends BaseService implements InitializingBean {
 	}
 	
 	@Transactional(readOnly = false)
-	public User assignUserToPayCompany(PayCompany payCompany, User user) {
+	public User assignUserToCompany(Company company, User user) {
 		if (user == null){
 			return null;
 		}
-		List<String> payCompanyIds = user.getPayCompanyIdList();
-		if (payCompanyIds.contains(payCompany.getId())) {
+		List<String> companyIds = user.getCompanyIdList();
+		if (companyIds.contains(company.getId())) {
 			return null;
 		}
-		user.getPayCompanyList().add(payCompany);
+		user.getCompanyList().add(company);
 		saveUser(user);
 		return user;
 	}

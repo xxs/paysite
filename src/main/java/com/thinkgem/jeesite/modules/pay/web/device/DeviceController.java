@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.pay.entity.device.Device;
 import com.thinkgem.jeesite.modules.pay.service.device.DeviceService;
 
@@ -35,10 +34,10 @@ public class DeviceController extends BaseController {
 	private DeviceService deviceService;
 	
 	@ModelAttribute
-	public Device get(@RequestParam(required=false) String id) {
+	public Device get(@RequestParam(required=false) Long pk) {
 		Device entity = null;
-		if (StringUtils.isNotBlank(id)){
-			entity = deviceService.get(id);
+		if (pk!=null){
+			entity = deviceService.get(pk);
 		}
 		if (entity == null){
 			entity = new Device();

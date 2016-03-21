@@ -24,7 +24,7 @@
 			<include refid="deviceColumns"/>
 		FROM device a
 		<include refid="deviceJoins"/>
-		WHERE a.id = #{id}
+		WHERE a.pk = #{pk}
 	</select>
 	
 	<select id="findList" resultType="Device">
@@ -105,12 +105,12 @@
 			create_time = #{createTime},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate}
-		WHERE id = #{id}
+		WHERE pk = #{pk}
 	</update>
 	
 	<update id="delete">
 		DELETE FROM device
-		WHERE id = #{id}
+		WHERE pk = #{pk}
 	</update>
 	
 </mapper>

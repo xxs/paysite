@@ -31,7 +31,7 @@
 		<li class="active"><a href="${ctx}/pay/store/store/form?id=${store.id}">门店<shiro:hasPermission name="pay:store:store:edit">${not empty store.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:store:store:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="store" action="${ctx}/pay/store/store/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
+		<form:hidden path="pk"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">商户外键：</label>

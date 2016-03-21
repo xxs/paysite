@@ -5,13 +5,15 @@ package com.thinkgem.jeesite.modules.pay.service.company;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.pay.entity.company.Company;
 import com.thinkgem.jeesite.modules.pay.dao.company.CompanyDao;
+import com.thinkgem.jeesite.modules.pay.entity.company.Company;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 
 /**
  * 商户管理Service
@@ -22,8 +24,18 @@ import com.thinkgem.jeesite.modules.pay.dao.company.CompanyDao;
 @Transactional(readOnly = true)
 public class CompanyService extends CrudService<CompanyDao, Company> {
 
-	public Company get(String id) {
-		return super.get(id);
+	@Autowired
+	private CompanyDao companyDao;
+	
+	public Company get(Long pk) {
+		return super.get(pk);
+	}
+	
+	public List<User> findUserByCompanyId(Company company){
+		return companyDao.findUserByCompanyId(company);
+	}
+	public int deleteUserCompany(User user,Company company){
+		return companyDao.deleteUserCompany(user.getId(),company.getPk());
 	}
 	
 	public List<Company> findList(Company company) {

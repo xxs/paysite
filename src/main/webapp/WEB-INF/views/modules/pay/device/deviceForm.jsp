@@ -31,7 +31,7 @@
 		<li class="active"><a href="${ctx}/pay/device/device/form?id=${device.id}">设备<shiro:hasPermission name="pay:device:device:edit">${not empty device.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:device:device:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="device" action="${ctx}/pay/device/device/save" method="post" class="form-horizontal">
-		<form:hidden path="id"/>
+		<form:hidden path="pk"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
 			<label class="control-label">门店外键：</label>

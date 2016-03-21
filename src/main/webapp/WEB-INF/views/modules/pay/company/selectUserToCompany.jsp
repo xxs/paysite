@@ -48,7 +48,7 @@
 		function treeOnClick(event, treeId, treeNode, clickFlag){
 			$.fn.zTree.getZTreeObj(treeId).expandNode(treeNode);
 			if("officeTree"==treeId){
-				$.get("${ctx}/pay/company/payCompany/users?officeId=" + treeNode.id, function(userNodes){
+				$.get("${ctx}/pay/company/company/users?officeId=" + treeNode.id, function(userNodes){
 					$.fn.zTree.init($("#userTree"), setting, userNodes);
 				});
 			}
@@ -74,7 +74,7 @@
 			    if (v == 'ok'){
 					var tips="";
 					if(pre_ids.sort().toString() == ids.sort().toString()){
-						tips = "未给商户【${payCompany.name}】分配新成员！";
+						tips = "未给商户【${company.name}】分配新成员！";
 					}else{
 						tips = "已选人员清除成功！";
 					}
@@ -88,7 +88,7 @@
 			    }
 			    return true;
 			};
-			tips="确定清除商户【${payCompany.name}】下的已选人员？";
+			tips="确定清除商户【${company.name}】下的已选人员？";
 			top.$.jBox.confirm(tips, "清除确认", submit);
 		};
 	</script>

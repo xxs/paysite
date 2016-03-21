@@ -19,9 +19,9 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.common.supcan.annotation.treelist.cols.SupCol;
 import com.thinkgem.jeesite.common.utils.Collections3;
 import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
-import com.thinkgem.jeesite.common.utils.excel.fieldtype.PayCompanyListType;
+import com.thinkgem.jeesite.common.utils.excel.fieldtype.CompanyListType;
 import com.thinkgem.jeesite.common.utils.excel.fieldtype.RoleListType;
-import com.thinkgem.jeesite.modules.pay.entity.company.PayCompany;
+import com.thinkgem.jeesite.modules.pay.entity.company.Company;
 
 /**
  * 用户Entity
@@ -53,11 +53,11 @@ public class User extends DataEntity<User> {
 	private Date oldLoginDate;	// 上次登陆日期
 	
 	private Role role;	// 根据角色查询用户条件
-	private PayCompany payCompany;	// 根据商户查询用户条件
+	private Company company1;	// 根据商户查询用户条件
 	
 	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 	
-	private List<PayCompany> payCompanyList = Lists.newArrayList(); // 拥有商户列表
+	private List<Company> companyList = Lists.newArrayList(); // 拥有商户列表
 
 	public User() {
 		super();
@@ -78,9 +78,9 @@ public class User extends DataEntity<User> {
 		this.role = role;
 	}
 	
-	public User(PayCompany payCompany){
+	public User(Company company1){
 		super();
-		this.payCompany = payCompany;
+		this.company1 = company1;
 	}
 	
 	public String getPhoto() {
@@ -284,12 +284,12 @@ public class User extends DataEntity<User> {
 		this.role = role;
 	}
 	
-	public PayCompany getPayCompany() {
-		return payCompany;
+	public Company getCompany1() {
+		return company1;
 	}
 
-	public void setPayCompany(PayCompany payCompany) {
-		this.payCompany = payCompany;
+	public void setCompany1(Company company1) {
+		this.company1 = company1;
 	}
 
 	@JsonIgnore
@@ -303,13 +303,13 @@ public class User extends DataEntity<User> {
 	}
 	
 	@JsonIgnore
-	@ExcelField(title="拥有商户", align=1, sort=800, fieldType=PayCompanyListType.class)
-	public List<PayCompany> getPayCompanyList() {
-		return payCompanyList;
+	@ExcelField(title="拥有商户", align=1, sort=800, fieldType=CompanyListType.class)
+	public List<Company> getCompanyList() {
+		return companyList;
 	}
 	
-	public void setPayCompanyList(List<PayCompany> payCompanyList) {
-		this.payCompanyList = payCompanyList;
+	public void setCompanyList(List<Company> companyList) {
+		this.companyList = companyList;
 	}
 
 	@JsonIgnore
@@ -322,12 +322,12 @@ public class User extends DataEntity<User> {
 	}
 	
 	@JsonIgnore
-	public List<String> getPayCompanyIdList() {
-		List<String> payCompanyIdList = Lists.newArrayList();
-		for (PayCompany payCompany : payCompanyList) {
-			payCompanyIdList.add(payCompany.getId());
+	public List<String> getCompanyIdList() {
+		List<String> companyIdList = Lists.newArrayList();
+		for (Company company : companyList) {
+			companyIdList.add(company.getId());
 		}
-		return payCompanyIdList;
+		return companyIdList;
 	}
 
 	public void setRoleIdList(List<String> roleIdList) {
@@ -339,12 +339,12 @@ public class User extends DataEntity<User> {
 		}
 	}
 	
-	public void setPayCompanyIdList(List<String> payCompanyIdList) {
-		payCompanyList = Lists.newArrayList();
-		for (String payCompanyId : payCompanyIdList) {
-			PayCompany payCompany = new PayCompany();
-			payCompany.setId(payCompanyId);
-			payCompanyList.add(payCompany);
+	public void setCompanyIdList(List<String> companyIdList) {
+		companyList = Lists.newArrayList();
+		for (String companyId : companyIdList) {
+			Company company = new Company();
+			company.setId(companyId);
+			companyList.add(company);
 		}
 	}
 	
@@ -357,8 +357,8 @@ public class User extends DataEntity<User> {
 	/**
 	 * 用户拥有的商户名称字符串, 多个角色名称用','分隔.
 	 */
-	public String getPayCompanyNames() {
-		return Collections3.extractToString(payCompanyList, "name", ",");
+	public String getCompanyNames() {
+		return Collections3.extractToString(companyList, "name", ",");
 	}
 	
 	public boolean isAdmin(){

@@ -294,8 +294,8 @@
 		DELETE FROM sys_user_role WHERE user_id = #{id}
 	</delete>
 	<!-- 删除用户和商户关联表数据 -->
-	<delete id="deleteUserPayCompany">
-		DELETE FROM sys_user_company WHERE user_id = #{id}
+	<delete id="deleteUserCompany">
+		DELETE FROM company_user_auth WHERE user_id = #{id}
 	</delete>
 	
 	<!-- 插入用户和角色关联表数据 -->
@@ -309,10 +309,10 @@
 		</foreach>
 	</insert>
 	<!-- 插入用户和角色关联表数据 -->
-	<insert id="insertUserPayCompany">
-		INSERT INTO sys_user_company(user_id, company_id)
-		<foreach collection="payCompanyList" item="company" separator=" union all ">
-			SELECT #{id}, #{company.id}
+	<insert id="insertUserCompany">
+		INSERT INTO company_user_auth(user_id, com_pk)
+		<foreach collection="companyList" item="company" separator=" union all ">
+			SELECT #{id}, #{company.pk}
 			<if test="dbName != 'mssql'">
 			FROM dual
 			</if>

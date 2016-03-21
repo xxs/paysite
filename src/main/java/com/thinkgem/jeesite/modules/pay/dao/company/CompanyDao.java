@@ -20,6 +20,6 @@ public interface CompanyDao extends CrudDao<Company> {
 	
 	public List<User> findUserByCompanyId(Company company);
 	
-	public int deleteUserCompany(String user_id,String company_id);
+	public int deleteUserCompany(String user_id,Long company_id);
 	
 }

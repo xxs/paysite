@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.pay.entity.function.Function;
 import com.thinkgem.jeesite.modules.pay.service.function.FunctionService;
 
@@ -35,10 +34,10 @@ public class FunctionController extends BaseController {
 	private FunctionService functionService;
 	
 	@ModelAttribute
-	public Function get(@RequestParam(required=false) String id) {
+	public Function get(@RequestParam(required=false) Long pk) {
 		Function entity = null;
-		if (StringUtils.isNotBlank(id)){
-			entity = functionService.get(id);
+		if (pk!=null){
+			entity = functionService.get(pk);
 		}
 		if (entity == null){
 			entity = new Function();
