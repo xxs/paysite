@@ -28,15 +28,20 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/pay/device/device/">设备列表</a></li>
-		<li class="active"><a href="${ctx}/pay/device/device/form?id=${device.id}">设备<shiro:hasPermission name="pay:device:device:edit">${not empty device.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:device:device:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/pay/device/device/form?pk=${device.pk}">设备<shiro:hasPermission name="pay:device:device:edit">${not empty device.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:device:device:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="device" action="${ctx}/pay/device/device/save" method="post" class="form-horizontal">
 		<form:hidden path="pk"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">门店外键：</label>
+			<label class="control-label">归属门店：</label>
 			<div class="controls">
-				<form:input path="store" htmlEscape="false" maxlength="20" class="input-xlarge required digits"/>
+				<form:select path="store" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<c:forEach items="${storeList}" var="store">
+						<form:option value="${store.pk}" label="${store.name }"/>
+					</c:forEach>
+				</form:select>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>
@@ -62,14 +67,6 @@
 			<label class="control-label">备注：</label>
 			<div class="controls">
 				<form:input path="remark" htmlEscape="false" maxlength="256" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">创建时间：</label>
-			<div class="controls">
-				<input name="createTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${device.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="form-actions">

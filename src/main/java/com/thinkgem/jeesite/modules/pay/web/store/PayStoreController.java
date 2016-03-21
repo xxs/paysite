@@ -41,6 +41,7 @@ public class PayStoreController extends BaseController {
 	@Autowired
 	private PayFunctionService payFunctionService;
 	
+	
 	@ModelAttribute
 	public PayStore get(@RequestParam(required=false) String id) {
 		PayStore entity = null;

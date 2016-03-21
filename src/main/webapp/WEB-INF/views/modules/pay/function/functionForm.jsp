@@ -28,7 +28,7 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/pay/function/function/">功能列表</a></li>
-		<li class="active"><a href="${ctx}/pay/function/function/form?id=${function.id}">功能<shiro:hasPermission name="pay:function:function:edit">${not empty function.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:function:function:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/pay/function/function/form?pk=${function.pk}">功能<shiro:hasPermission name="pay:function:function:edit">${not empty function.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:function:function:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="function" action="${ctx}/pay/function/function/save" method="post" class="form-horizontal">
 		<form:hidden path="pk"/>
@@ -37,6 +37,12 @@
 			<label class="control-label">名称：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="128" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">标志：</label>
+			<div class="controls">
+				<form:input path="id" htmlEscape="false" maxlength="128" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -58,14 +64,6 @@
 			<label class="control-label">备注：</label>
 			<div class="controls">
 				<form:input path="remark" htmlEscape="false" maxlength="256" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">创建日期：</label>
-			<div class="controls">
-				<input name="createTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${function.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>
 		<div class="form-actions">

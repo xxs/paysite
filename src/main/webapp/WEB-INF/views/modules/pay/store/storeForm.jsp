@@ -28,15 +28,20 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/pay/store/store/">门店列表</a></li>
-		<li class="active"><a href="${ctx}/pay/store/store/form?id=${store.id}">门店<shiro:hasPermission name="pay:store:store:edit">${not empty store.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:store:store:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/pay/store/store/form?pk=${store.pk}">门店<shiro:hasPermission name="pay:store:store:edit">${not empty store.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="pay:store:store:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="store" action="${ctx}/pay/store/store/save" method="post" class="form-horizontal">
 		<form:hidden path="pk"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">商户外键：</label>
+			<label class="control-label">所属商户：</label>
 			<div class="controls">
-				<form:input path="company" htmlEscape="false" maxlength="20" class="input-xlarge required digits"/>
+				<form:select path="company" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<c:forEach items="${companyList}" var="company">
+						<form:option value="${company.pk}" label="${company.name }"/>
+					</c:forEach>
+				</form:select>
 				<span class="help-inline"><font color="red">*</font> </span>
 			</div>
 		</div>

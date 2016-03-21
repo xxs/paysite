@@ -21,8 +21,10 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.Collections3;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.pay.entity.company.Company;
 import com.thinkgem.jeesite.modules.pay.entity.function.Function;
 import com.thinkgem.jeesite.modules.pay.entity.store.Store;
+import com.thinkgem.jeesite.modules.pay.service.company.CompanyService;
 import com.thinkgem.jeesite.modules.pay.service.function.FunctionService;
 import com.thinkgem.jeesite.modules.pay.service.store.StoreService;
 
@@ -39,6 +41,8 @@ public class StoreController extends BaseController {
 	private StoreService storeService;
 	@Autowired
 	private FunctionService functionService;
+	@Autowired
+	private CompanyService companyService;
 	
 	@ModelAttribute
 	public Store get(@RequestParam(required=false) Long pk) {
@@ -64,6 +68,8 @@ public class StoreController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Store store, Model model) {
 		model.addAttribute("store", store);
+		List<Company> companyList = companyService.findAllList(new Company());
+		model.addAttribute("companyList", companyList);
 		return "modules/pay/store/storeForm";
 	}
 

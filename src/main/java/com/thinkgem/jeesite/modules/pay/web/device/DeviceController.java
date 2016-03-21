@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.pay.web.device;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +21,9 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.pay.entity.device.Device;
+import com.thinkgem.jeesite.modules.pay.entity.store.Store;
 import com.thinkgem.jeesite.modules.pay.service.device.DeviceService;
+import com.thinkgem.jeesite.modules.pay.service.store.StoreService;
 
 /**
  * 设备管理Controller
@@ -32,6 +36,8 @@ public class DeviceController extends BaseController {
 
 	@Autowired
 	private DeviceService deviceService;
+	@Autowired
+	private StoreService storeService;
 	
 	@ModelAttribute
 	public Device get(@RequestParam(required=false) Long pk) {
@@ -57,6 +63,8 @@ public class DeviceController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Device device, Model model) {
 		model.addAttribute("device", device);
+		List<Store> storeList = storeService.findAllList(new Store());
+		model.addAttribute("storeList", storeList);
 		return "modules/pay/device/deviceForm";
 	}
 
