@@ -32,6 +32,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.pay.entity.adminuser.AdminUser;
+import com.thinkgem.jeesite.modules.pay.service.adminuser.AdminUserService;
 import com.thinkgem.jeesite.modules.sys.entity.Office;
 import com.thinkgem.jeesite.modules.sys.entity.Role;
 import com.thinkgem.jeesite.modules.sys.entity.User;
@@ -49,6 +51,8 @@ public class UserController extends BaseController {
 
 	@Autowired
 	private SystemService systemService;
+	@Autowired
+	private AdminUserService adminUserService;
 	
 	@ModelAttribute
 	public User get(@RequestParam(required=false) String id) {
@@ -132,6 +136,10 @@ public class UserController extends BaseController {
 			UserUtils.clearCache();
 			//UserUtils.getCacheMap().clear();
 		}
+		//为支付系统添加相应的用户信息
+		AdminUser adminUser = new AdminUser();
+		//adminUser.setId(id);
+		adminUserService.save(adminUser);
 		addMessage(redirectAttributes, "保存用户'" + user.getLoginName() + "'成功");
 		return "redirect:" + adminPath + "/sys/user/list?repage";
 	}
