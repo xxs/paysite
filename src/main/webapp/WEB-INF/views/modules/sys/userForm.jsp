@@ -161,6 +161,49 @@
 				</div>
 			</div>
 		</c:if>
+		<div class="control-group">
+			<label class="control-label">关联账户:</label>
+			<div class="controls">
+				<table id="contentTable" class="table table-striped table-bordered table-condensed">
+					<thead>
+						<tr>
+							<th colspan="2" style="text-align: center;">admin_user 信息维护</th>
+						</tr>
+					</thead>
+					<tr>
+						<td>
+							账号：
+						</td>
+						<td>
+							<input id="" name="a_id" type="text" value="" maxlength="255" class="input-small "/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							类型：
+						</td>
+						<td>
+							<select class="input-small" name="a_type">
+								<option></option>
+								<c:forEach items="${fns:getDictList('pay_adminuser_flag')}" var="tem">
+									<option value="${tem.value }">${tem.label }</option>
+								</c:forEach>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							状态：
+						</td>
+						<td>
+							<c:forEach items="${fns:getDictList('yes_no')}"  var="tem">
+								<input type="radio" name="a_status" value="${tem.value }">${tem.label }
+							</c:forEach>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
 		<div class="form-actions">
 			<shiro:hasPermission name="sys:user:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

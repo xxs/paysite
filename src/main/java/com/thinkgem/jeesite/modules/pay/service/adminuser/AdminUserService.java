@@ -5,13 +5,14 @@ package com.thinkgem.jeesite.modules.pay.service.adminuser;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.pay.entity.adminuser.AdminUser;
 import com.thinkgem.jeesite.modules.pay.dao.adminuser.AdminUserDao;
+import com.thinkgem.jeesite.modules.pay.entity.adminuser.AdminUser;
 
 /**
  * 账号管理Service
@@ -22,6 +23,9 @@ import com.thinkgem.jeesite.modules.pay.dao.adminuser.AdminUserDao;
 @Transactional(readOnly = true)
 public class AdminUserService extends CrudService<AdminUserDao, AdminUser> {
 
+	@Autowired
+	private AdminUserDao adminUserDao;
+	
 	public AdminUser get(String id) {
 		return super.get(id);
 	}
@@ -32,6 +36,14 @@ public class AdminUserService extends CrudService<AdminUserDao, AdminUser> {
 	
 	public Page<AdminUser> findPage(Page<AdminUser> page, AdminUser adminUser) {
 		return super.findPage(page, adminUser);
+	}
+	public AdminUser findAdminUserByUserId(String userId){
+		List<AdminUser> as = adminUserDao.findAdminUserByUserId(userId);
+		if(as!=null &&as.size()>0){
+			return as.get(0);
+		}else{
+			return null;
+		}
 	}
 	
 	@Transactional(readOnly = false)

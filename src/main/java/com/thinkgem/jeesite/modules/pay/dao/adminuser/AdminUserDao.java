@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.pay.dao.adminuser;
 
+import java.util.List;
+
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.pay.entity.adminuser.AdminUser;
@@ -14,5 +16,5 @@ import com.thinkgem.jeesite.modules.pay.entity.adminuser.AdminUser;
  */
 @MyBatisDao
 public interface AdminUserDao extends CrudDao<AdminUser> {
-	
+	public List<AdminUser> findAdminUserByUserId(String userId);
 }

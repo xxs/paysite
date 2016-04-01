@@ -22,6 +22,7 @@ public class AdminUser extends DataEntity<AdminUser> {
 	private String pass;		// 密码
 	private String flag;		// 类型
 	private String status;		// 状态
+	private String userId;		// 用户主键
 	private Date createTime;		// 创建时间
 	
 	public AdminUser() {
@@ -32,13 +33,21 @@ public class AdminUser extends DataEntity<AdminUser> {
 		super(id);
 	}
 
-	@NotNull(message="主键不能为空")
 	public Long getPk() {
 		return pk;
 	}
-
+	
 	public void setPk(Long pk) {
 		this.pk = pk;
+	}
+	
+	@NotNull(message="用户主键为空")
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	@Length(min=0, max=128, message="密码长度必须介于 0 和 128 之间")

@@ -101,7 +101,7 @@ public class UserController extends BaseController {
 
 	@RequiresPermissions("sys:user:edit")
 	@RequestMapping(value = "save")
-	public String save(User user, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+	public String save(User user,String a_id,String a_type,String a_status, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		if(Global.isDemoMode()){
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/sys/user/list?repage";
@@ -137,9 +137,20 @@ public class UserController extends BaseController {
 			//UserUtils.getCacheMap().clear();
 		}
 		//为支付系统添加相应的用户信息
-		AdminUser adminUser = new AdminUser();
-		//adminUser.setId(id);
+		
+		AdminUser adminUser = adminUserService.findAdminUserByUserId(user.getId());
+		if(null == adminUser){
+			adminUser = new AdminUser();
+			adminUser.setUserId(user.getId());
+		}
+		adminUser.setId(a_id);
+		adminUser.setFlag(a_type);
+		adminUser.setStatus(a_status);
+		adminUser.setPass(user.getPassword());
+		adminUser.setCreateTime(user.getCreateDate());
 		adminUserService.save(adminUser);
+			
+		
 		addMessage(redirectAttributes, "保存用户'" + user.getLoginName() + "'成功");
 		return "redirect:" + adminPath + "/sys/user/list?repage";
 	}
